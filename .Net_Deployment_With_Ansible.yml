@@ -1,0 +1,45 @@
+# Ansible Script for Deployment of .Net Projects on Windows Server Running IIS App Server
+---
+- name: iis stop play
+  hosts: prod_server
+  vars:
+     site_name: "{{site_name}}"
+  tasks:
+   - import_role:
+      name: win_iis
+     vars:
+      sitename: '{{site_name}}'
+      sitestate: 'stopped'
+
+- name: play for application deployment
+  hosts: msbuild_server
+  vars:
+    site_name: "{{site_name}}"
+    src: "{{src}}"
+    src_excl_dir: "{{src_excl_dir}}"
+    src_excl_file: "{{src_excl_file}}"
+    dest: "{{dest}}"
+    dest_excl: "{{dest_excl}}"
+  tasks:
+   - import_role:
+      name: win_command
+     vars:
+      argument: 'winrar a -r -ep1 -x{{dest}}\{{dest_excl}}  {{dest}}\{{site_name}}.rar {{dest}}'
+     tags: zip
+   - import_role:
+      name: win_command
+     vars:
+        argument: 'robocopy {{src}} {{dest}} /S /MT:5 /R:3 /W:10 /XF {{src_excl_file}}; exit 0 '
+     tags: sync
+
+- name: play for starting the application
+  hosts: prod_server
+  vars:
+    site_name: '5555'
+  tasks:
+   - import_role:
+       name: win_iis
+     vars:
+      sitename: '{{site_name}}'
+      sitestate: 'started'
+...
