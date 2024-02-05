@@ -1,0 +1,10 @@
+---
+# tasks file for win_service
+- name: Service Start/Stop Task
+  import_tasks: service_state.yml
+  tags: [state]
+
+- name: Service Startup Task
+  import_tasks: service_startup.yml
+  tags: [startup]
+...

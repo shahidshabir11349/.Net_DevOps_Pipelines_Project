@@ -1,0 +1,6 @@
+# main tasks file
+- name: iis sites start/stop
+  win_iis_website:
+   name: '{{sitename}}'
+   state: '{{sitestate}}'
+  tags: sitestate

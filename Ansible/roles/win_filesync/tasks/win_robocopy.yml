@@ -1,0 +1,7 @@
+---
+- name: Windows File Sync
+  win_robocopy:
+   src: '{{source}}'
+   dest: '{{destination}}'
+   flags: '{{flags}}'
+...

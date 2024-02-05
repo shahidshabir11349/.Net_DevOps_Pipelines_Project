@@ -1,0 +1,4 @@
+- name: pool recycle with command
+  win_command:
+    cmd: '"powershell.exe" "appcmd recycle apppool "{{poolname}}"'
+  tags: recycle2

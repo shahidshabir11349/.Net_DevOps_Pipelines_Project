@@ -1,0 +1,6 @@
+---
+# tasks file for win_filesync
+- name: file sync task
+  import_tasks: win_robocopy.yml
+  tags: sync
+...

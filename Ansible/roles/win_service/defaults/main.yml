@@ -1,0 +1,4 @@
+---
+# defaults file for win_service
+startup: "auto"
+...

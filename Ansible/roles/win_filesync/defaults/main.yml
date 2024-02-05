@@ -1,0 +1,4 @@
+---
+# defaults file for win_filesync
+args: "/S /MT:5 /XD"
+...

@@ -1,0 +1,5 @@
+---
+- name: windows command executing module
+  win_command:
+   cmd: '"powershell.exe" "{{argument}}"'
+...

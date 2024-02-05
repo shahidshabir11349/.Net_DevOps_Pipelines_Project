@@ -1,0 +1,6 @@
+---
+- name: windows command executing
+  import_tasks: win_command.yml
+  tags:
+   command
+...

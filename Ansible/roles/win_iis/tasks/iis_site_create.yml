@@ -1,0 +1,30 @@
+---
+- name: iis new pool creation task
+  win_iis_webapppool:
+   name: '{{sitename}}'
+   state: started
+  tags: create
+- name: iis new site creation task
+  win_iis_website:
+    name: '{{sitename}}'
+    state: started
+    port: '80'
+    ip: '*'
+    hostname: '{{url}}'
+    application_pool: '{{sitename}}'
+    physical_path: '{{path}}'
+#   parameters: logfile.directory:C:\inetpub\wwwroot\test
+  register: website
+  tags: create
+- name: iis bindings
+  win_iis_webbinding:
+    name: '{{sitename}}'
+    ip: '*'
+    port: '443'
+    state: present
+    protocol: https
+    certificate_hash: '‎‎97a1fdf451770b4d0107bb8a892ad4accc0d36a6'
+    certificate_store_name: pshealthpunjab
+    host_header: '{{url}}'
+  tags: create
+...

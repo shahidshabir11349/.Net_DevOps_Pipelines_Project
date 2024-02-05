@@ -1,0 +1,5 @@
+- name: iss webappool state control
+  win_iis_webapppool:
+    name: '{{poolname}}'
+    state: '{{poolstate}}'
+  tags: poolstate

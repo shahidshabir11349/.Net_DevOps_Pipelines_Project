@@ -1,0 +1,8 @@
+---
+- name: Service state Admin Role
+  win_service:
+   name: '{{service_name}}'
+   state: '{{state}}'
+  tags:
+   - state
+...

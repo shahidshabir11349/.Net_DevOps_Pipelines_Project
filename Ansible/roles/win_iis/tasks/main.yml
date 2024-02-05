@@ -1,0 +1,19 @@
+---
+# tasks file for win_iis_site
+- name: task for iis site adminstration
+  include_tasks: iis_site.yml
+  tags: 
+   - sitestate
+
+- name: task for iis pool administration
+  include_tasks: iis_pool.yml
+  tags:
+   - poolstate
+
+- name: task for new iis site creation
+  include_tasks: iis_site_create.yml
+  tags: create
+
+- name: task for iis pool recycle
+  include_tasks: iis_pool_recycle.yml
+  tags: recycle

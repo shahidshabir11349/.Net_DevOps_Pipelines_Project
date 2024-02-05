@@ -1,0 +1,67 @@
+# Ansible Control Node
+[ansible]
+172.16.15.114
+
+# Gitea Server
+[gitea]
+172.16.15.116
+
+# Jenkins CI/CD Server
+[jenkins]
+172.16.15.115
+
+# Docker Build Server
+[docker]
+172.16.15.117
+
+# Prometheus Server
+[Prometheus]
+172.16.15.113
+
+# linux global configuration group
+[linux_servers]
+172.16.15.113
+172.16.15.114
+172.16.15.115
+172.16.15.116
+172.16.15.117
+
+#[linux:vars]
+
+# windows stagging servers group
+[win_stagging_srv]
+172.16.15.10
+
+# windows servers global configuration group
+[msbuild_server]
+172.16.15.120
+
+[msbuild_server:vars]
+ansible_connection=winrm
+ansible_winrm_scheme=http
+become_method=runas
+ansible_shell_type=powershell
+shell_type=powershell
+ansible_user=administrator
+ansible_password=password
+ansible_winrm_server_cert_validation=ignore
+#ansible_ssh_user=administrator
+ansible_port=5985
+ansible_winrm_transport=ntlm
+
+
+[prod_server]
+172.16.15.120
+
+[prod_server:vars]
+ansible_connection=winrm
+ansible_winrm_scheme=http
+become_method=runas
+ansible_shell_type=powershell
+shell_type=powershell
+ansible_user=administrator
+ansible_password=password
+ansible_winrm_server_cert_validation=ignore
+#ansible_ssh_user=administrator
+ansible_port=5985
+ansible_winrm_transport=ntlm

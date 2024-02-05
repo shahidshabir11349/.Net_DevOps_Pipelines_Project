@@ -1,0 +1,7 @@
+---
+# defaults file for win_iis
+
+#sitename: 'none'
+#sitestate: 'none'
+#poolname: 'none'
+#poolstate: 'none'

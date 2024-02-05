@@ -1,0 +1,129 @@
+def gv
+pipeline {
+   agent {
+	   node {
+         label 'ms_build_node'
+      }
+	}
+	environment {
+	   VAR = '1.2.3'
+		BUILD_STATUS = 'true'
+   }
+	triggers { 
+      pollSCM '' 
+   }
+   stages {
+      stage('loading scripts') {
+         steps {
+            script {
+               gv = load("script.groovy")
+            }
+         }        
+      }
+      stage('Build') {
+         when {
+            expression {
+               BRANCH_NAME == 'production' || BRANCH_NAME == 'stagging' || BRANCH_NAME == 'development'
+            }
+         }
+		   steps {
+            echo 'building application'
+            script{
+               gv.buildapp()
+            }
+	      } 
+      }
+	   stage('Deploy') {
+         stages{
+            stage('development'){
+               when{
+                  expression{
+                     BRANCH_NAME == 'development'
+                  }
+               }
+               agent {
+                  node{
+                     label 'ms_build_node'
+                  }
+               }
+               steps{
+                  script{
+                     properties([
+                        parameters([
+                           string(name: 'SITE_NAME', description: 'Project Name To Deploy', defaultValue: 'eststring'),
+                           string(name: 'FILENAME', description: 'Name of the Backup File', defaultValue: 'eststring'),
+                           string(name: 'SRC', description: 'Source Path to copy files', defaultValue: 'eststring'),
+                           string(name: 'DEST', description: 'destination path to files', defaultValue: 'eststring'),
+                           string(name: 'EXCL_DEST', description: 'files or dirs to exclude in destination', defaultValue: 'eststring'),
+                           string(name: 'EXCL_SRC', description: 'files or dirs to exclude in source', defaultValue: 'eststring')
+                        ])
+                     ])
+                     gv.deploy_app()
+                  }
+               }
+            }
+		      stage('stagging'){
+               when{
+                  expression{
+                     BRANCH_NAME == 'stagging'
+                  }
+               }
+               agent {
+                  node{
+                     label 'ms_build_node'
+                  }
+               }
+               steps{
+                  script{
+                     properties([
+                        parameters([
+                           string(name: 'SITE_NAME', description: 'Project Name To Deploy', defaultValue: 'eststring'),
+                           string(name: 'FILENAME', description: 'Name of the Backup File', defaultValue: 'eststring'),
+                           string(name: 'SRC', description: 'Source Path to copy files', defaultValue: 'eststring'),
+                           string(name: 'DEST', description: 'destination path to files', defaultValue: 'eststring'),
+                           string(name: 'EXCL_DEST', description: 'files or dirs to exclude in destination', defaultValue: 'eststring'),
+                           string(name: 'EXCL_SRC', description: 'files or dirs to exclude in source', defaultValue: 'eststring')
+                        ])
+                     ])
+                     gv.deploy_app()
+                  }
+               }
+            }
+            stage('production'){
+               when{
+                  expression{
+                     BRANCH_NAME == 'production'
+                  }
+               }
+               agent {
+                  node{
+                     label 'ansible'
+                  }
+               }
+               steps{
+                  script{
+                     properties([
+                        parameters([
+                           string(name: 'SITE_NAME', description: 'Project Name To Deploy', defaultValue: '5555'),
+                           string(name: 'FILENAME', description: 'Name of the Backup File', defaultValue: 'backup'),
+                           string(name: 'SRC', description: 'Source Path to copy files', defaultValue: 'C:\\Jenkins\\Publish\\CMS'),
+                           string(name: 'DEST', description: 'destination path to files', defaultValue: 'C:\\inetpub\\wwwroot\\cms.pshealthpunjab.gov.pk'),
+                           string(name: 'EXCL_DEST', description: 'files or dirs to exclude in destination', defaultValue: 'wwwroot\\Uploads\\*.*'),
+                           string(name: 'EXCL_SRC_DIR', description: 'files or dirs to exclude in source', defaultValue: 'none'),
+                           string(name: 'EXCL_SRC_FILE', description: 'files or dirs to exclude in source', defaultValue: 'none')
+                        ])
+                     ])
+                     gv.ansible_deploy()
+                  }
+
+               }
+            }
+	      }
+      }
+	}
+   post {
+      always {
+         echo 'this is test for post'
+      }
+   }
+}
